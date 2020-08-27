@@ -1,4 +1,5 @@
 #![feature(global_asm)]
+#![feature(lang_items)]
 #![no_std]
 #![no_main]
 
@@ -12,7 +13,7 @@ fn panic(_info: &PanicInfo) -> ! {
 }
 
 #[no_mangle]
-pub extern "C" fn __start_hello() -> ! {
+pub fn __start_hello() -> ! {
     let uart0 = 0x1000_0000 as *mut u8;
     for c in b"Hello, Rust\n".iter() {
         unsafe {
@@ -24,8 +25,8 @@ pub extern "C" fn __start_hello() -> ! {
 }
 
 #[no_mangle]
-pub extern "C" fn abort() -> ! {
+pub fn abort() -> ! {
     loop {}
 }
 
-
+#[lang = "eh_personality"] extern fn eh_personality() {}
